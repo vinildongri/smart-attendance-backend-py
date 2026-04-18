@@ -1,5 +1,7 @@
-opencv-python
+opencv-python-headless
 face_recognition
 requests
 python-dotenv
 numpy
+Flask==3.0.0
+gunicorn==21.2.0
