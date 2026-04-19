@@ -19,16 +19,18 @@ RUN apt-get update && apt-get install -y \
 # Copy the requirements file into the container
 COPY requirements.txt .
 
+# --- THIS IS THE MAGIC FIX ---
+# Forces the C++ compiler to use only 1 thread, preventing the 8GB RAM crash
+ENV CMAKE_BUILD_PARALLEL_LEVEL=1
+
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of your application code
 COPY . .
 
-# Expose the port your Flask/FastAPI app runs on (e.g., 5000 or 8000)
+# Expose the port
 EXPOSE 5000
 
-# Command to run your application (Adjust 'app:app' based on your entry point)
-# If using Flask: gunicorn app:app --bind 0.0.0.0:5000
-# If using FastAPI: uvicorn app:app --host 0.0.0.0 --port 5000
+# Command to run your application
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
