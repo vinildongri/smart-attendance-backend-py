@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.10-slim
 
 WORKDIR /app
 
@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
 
 ENV CMAKE_BUILD_PARALLEL_LEVEL=1
 
-# THIS IS THE LINE RENDER IS MISSING:
+# Install setuptools first, then the models, to prevent the import crash
+RUN pip install --no-cache-dir setuptools
 RUN pip install --no-cache-dir git+https://github.com/ageitgey/face_recognition_models
 
 COPY requirements.txt .
@@ -25,4 +26,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 EXPOSE 5000
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
+
+# Force 1 worker so the AI models don't exceed 512MB RAM
+CMD ["gunicorn", "--workers", "1", "--timeout", "120", "app:app", "--bind", "0.0.0.0:5000"]
