@@ -4,8 +4,9 @@ FROM python:3.12-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# IMPORTANT: Install the missing system libraries required by dlib and OpenCV
+# IMPORTANT: Added 'git' so pip can download the missing models directly from GitHub
 RUN apt-get update && apt-get install -y \
+    git \
     build-essential \
     cmake \
     libopenblas-dev \
@@ -19,8 +20,7 @@ RUN apt-get update && apt-get install -y \
 # Copy the requirements file into the container
 COPY requirements.txt .
 
-# --- THIS IS THE MAGIC FIX ---
-# Forces the C++ compiler to use only 1 thread, preventing the 8GB RAM crash
+# Throttle the C++ compiler to 1 core so it doesn't crash Render's 8GB RAM limit
 ENV CMAKE_BUILD_PARALLEL_LEVEL=1
 
 # Install Python dependencies
@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of your application code
 COPY . .
 
-# Expose the port
+# Expose the port your Flask app runs on
 EXPOSE 5000
 
 # Command to run your application

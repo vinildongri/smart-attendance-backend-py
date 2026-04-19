@@ -3,5 +3,5 @@ gunicorn
 werkzeug
 urllib3
 face_recognition
-# If you use cv2, use the headless version to avoid more missing .so errors:
 opencv-python-headless
+git+https://github.com/ageitgey/face_recognition_models
