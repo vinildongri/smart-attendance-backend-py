@@ -1,7 +1,7 @@
-opencv-python-headless
+flask
+gunicorn
+werkzeug
+urllib3
 face_recognition
-requests
-python-dotenv
-numpy
-Flask==3.0.0
-gunicorn==21.2.0
+# If you use cv2, use the headless version to avoid more missing .so errors:
+opencv-python-headless
