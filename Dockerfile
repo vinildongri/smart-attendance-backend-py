@@ -28,4 +28,4 @@ COPY . .
 EXPOSE 5000
 
 # Force 1 worker so the AI models don't exceed 512MB RAM
-CMD ["gunicorn", "--workers", "1", "--timeout", "120", "app:app", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "--workers", "1", "--timeout", "120", "--preload", "--capture-output", "--log-level", "debug", "app:app", "--bind", "0.0.0.0:5000"]
