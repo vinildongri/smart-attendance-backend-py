@@ -3,5 +3,5 @@ __pycache__/
 venv/
 .env
 .DS_Store
-assets/dataset/*
+# assets/dataset/*
 !assets/dataset/.gitkeep
